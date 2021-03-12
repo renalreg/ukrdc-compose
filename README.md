@@ -8,6 +8,20 @@ The `docker-compose` file here binds Traefik to port 9999. This can be easily re
 
 In this configuration, the Traefik proxy exists only to provide a dashboard and routing to get the entire stack up and running.
 
+### Enabling SSL
+
+- To `api`, add the label:
+  - `- "traefik.http.routers.fastapi.entrypoints=websecure`
+- To `app`, add the label:
+  - `- "traefik.http.routers.nuxt.entrypoints=websecure`
+- To `proxy`, add the commands:
+  - `- --entrypoints.web.address=:80`
+  - `- --entrypoints.websecure.address=:443`
+- To `proxy`, enable ports:
+  - `- "8080:8080"`
+  - `- "80:80"`
+  - `- "443:443"`
+
 ## .env variables
 
 ### Example - Staging + Port Forwarding
