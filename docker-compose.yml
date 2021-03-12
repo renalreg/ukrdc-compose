@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+  fastapi:
+    image: ghcr.io/renalreg/ukrdc-fastapi:main
+    # Public environment variables
+    environment:
+      - API_BASE=/api
+    # Private environment variables
+    env_file: .env
+    # Traefik labels
+    labels:
+      # Enable Traefik on this container
+      - "traefik.enable=true"
+      # Route the /api prefix to this container
+      - "traefik.http.routers.fastapi.rule=PathPrefix(`/api`)"
+      # Enable the container to be accessed via the 'web' entrypoint
+      - "traefik.http.routers.fastapi.entrypoints=web"
+      # Enable the api-stripprefix middleware
+      - "traefik.http.routers.fastapi.middlewares=api-stripprefix"
+      # Name our service fastapi
+      - "traefik.http.routers.fastapi.service=fastapi"
+      # Tell the service to listen to port 8000 on the container
+      - "traefik.http.services.fastapi.loadbalancer.server.port=8000"
+      # Tell the api-stripprefix middleware to strip /api
+      - "traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api"
+
+  nuxt:
+    image: ghcr.io/renalreg/ukrdc-nuxt:main
+    # Public environment variables
+    environment:
+      - APP_BASE=/app
+      - API_BASE=/api
+    # Private environment variables
+    env_file: .env
+    # Traefik labels
+    labels:
+      # Enable Traefik on this container
+      - "traefik.enable=true"
+      # Route the /app prefix to this container
+      - "traefik.http.routers.nuxt.rule=PathPrefix(`/app`)"
+      # Enable the container to be accessed via the 'web' entrypoint
+      - "traefik.http.routers.nuxt.entrypoints=web"
+      # Name our service nuxt
+      - "traefik.http.routers.nuxt.service=nuxt"
+      # Tell the service to listen to port 3000 on the container
+      - "traefik.http.services.nuxt.loadbalancer.server.port=3000"
+
+  proxy:
+    image: traefik:v2.0.2
+    command:
+      # Create our web entrypoint and bind to port 9999
+      - --entrypoints.web.address=:9999
+      # Enable the Docker provider
+      - --providers.docker
+      # Enable insecure access to theTraefiok dashboard
+      - --api.insecure=true
+    restart: always
+    ports:
+      - "8080:8080"
+      - "9999:9999"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
