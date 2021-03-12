@@ -14,6 +14,8 @@ In this configuration, the Traefik proxy exists only to provide a dashboard and 
   - `- "traefik.http.routers.fastapi.entrypoints=websecure`
 - To `app`, add the label:
   - `- "traefik.http.routers.nuxt.entrypoints=websecure`
+- To `proxy`, remove the command:
+  - `- --entrypoints.web.address=:9999`
 - To `proxy`, add the commands:
   - `- --entrypoints.web.address=:80`
   - `- --entrypoints.websecure.address=:443`
