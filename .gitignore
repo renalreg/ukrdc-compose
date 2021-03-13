@@ -17,3 +17,5 @@ __*/
 
 # Thumbnails
 ._*
+
+*.env
