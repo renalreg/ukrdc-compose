@@ -9,7 +9,7 @@ services:
       - ALLOWED_ORIGINS=["localhost:9999"]
     # Private environment variables
     env_file: .env
-    # Allow Nuxt SSR to access API
+    # Allow access to API port
     ports:
       - 8000:8000
     # Traefik labels
@@ -34,6 +34,9 @@ services:
       - LOCAL_API_BASE=http://fastapi:8000/api
     # Private environment variables
     env_file: .env
+    # Allow access to app port
+    ports:
+      - 3000:3000
     # Traefik labels
     labels:
       # Enable Traefik on this container
