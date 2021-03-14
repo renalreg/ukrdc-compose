@@ -29,9 +29,9 @@ In this configuration, the Traefik proxy exists only to provide a dashboard and 
 ### Example - Staging + Port Forwarding
 
 ```none
-MIRTH_URL="http://localhost:9004"
-UKRDC_HOST="localhost"
-JTRACE_HOST="localhost"
+MIRTH_URL="http://host.docker.internal:9004"
+UKRDC_HOST="host.docker.internal"
+JTRACE_HOST="host.docker.internal"
 
 UKRDC_USER="ukrdc"
 JTRACE_USER="ukrdc"

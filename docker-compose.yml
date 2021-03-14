@@ -6,8 +6,12 @@ services:
     # Public environment variables
     environment:
       - API_BASE=/api
+      - ALLOWED_ORIGINS=["localhost:9999"]
     # Private environment variables
     env_file: .env
+    # Allow Nuxt SSR to access API
+    ports:
+      - 8000:8000
     # Traefik labels
     labels:
       # Enable Traefik on this container
@@ -16,14 +20,10 @@ services:
       - "traefik.http.routers.fastapi.rule=PathPrefix(`/api`)"
       # Enable the container to be accessed via the 'web' entrypoint
       - "traefik.http.routers.fastapi.entrypoints=web"
-      # Enable the api-stripprefix middleware
-      - "traefik.http.routers.fastapi.middlewares=api-stripprefix"
       # Name our service fastapi
       - "traefik.http.routers.fastapi.service=fastapi"
       # Tell the service to listen to port 8000 on the container
       - "traefik.http.services.fastapi.loadbalancer.server.port=8000"
-      # Tell the api-stripprefix middleware to strip /api
-      - "traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api"
 
   nuxt:
     image: ghcr.io/renalreg/ukrdc-nuxt:main
@@ -31,6 +31,7 @@ services:
     environment:
       - APP_BASE=/app
       - API_BASE=/api
+      - LOCAL_API_BASE=http://fastapi:8000/api
     # Private environment variables
     env_file: .env
     # Traefik labels
@@ -47,7 +48,7 @@ services:
       - "traefik.http.services.nuxt.loadbalancer.server.port=3000"
 
   proxy:
-    image: traefik:v2.0.2
+    image: traefik:v2.4.7
     command:
       # Create our web entrypoint and bind to port 9999
       - --entrypoints.web.address=:9999
@@ -55,6 +56,8 @@ services:
       - --providers.docker
       # Enable insecure access to theTraefiok dashboard
       - --api.insecure=true
+      # Enable logging
+      - --accesslog=true
     restart: always
     ports:
       - "8080:8080"
