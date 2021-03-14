@@ -3,10 +3,6 @@ version: "3.9"
 services:
   fastapi:
     image: ghcr.io/renalreg/ukrdc-fastapi:main
-    # Public environment variables
-    environment:
-      - API_BASE=/api
-      - ALLOWED_ORIGINS=["localhost:9999"]
     # Private environment variables
     env_file: .env
     # Allow access to API port
@@ -29,9 +25,10 @@ services:
     image: ghcr.io/renalreg/ukrdc-nuxt:main
     # Public environment variables
     environment:
-      - APP_BASE=/app
-      - API_BASE=/api
-      - LOCAL_API_BASE=http://fastapi:8000/api
+      # Base API URL for server-side (SSR) requests
+      - BASE_URL=http://fastapi:8000
+      # Base API URL for browser-side (SPA) requests
+      - BROWSER_BASE_URL=/
     # Private environment variables
     env_file: .env
     # Allow access to app port
