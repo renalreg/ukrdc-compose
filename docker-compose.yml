@@ -54,7 +54,7 @@ services:
       - --entrypoints.web.address=:9999
       # Enable the Docker provider
       - --providers.docker
-      # Enable insecure access to theTraefiok dashboard
+      # Enable insecure access to the Traefik dashboard
       - --api.insecure=true
       # Enable logging
       - --accesslog=true
