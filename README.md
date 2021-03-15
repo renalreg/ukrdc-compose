@@ -1,6 +1,6 @@
 # UKRDC Compose
 
-Docker-Compose example configuration for UKRDC-TNG deployment
+Docker-Compose example configuration for UKRDC-TNG deployment, running Traefik as a reverse proxy/router.
 
 ## Traefik proxy port
 
