@@ -3,6 +3,9 @@ version: "3.9"
 services:
   fastapi:
     image: ghcr.io/renalreg/ukrdc-fastapi:main
+    # Public environment variables
+    environment:
+      - REDIS_HOST=redis
     # Private environment variables
     env_file: .env
     # Allow access to API port
@@ -20,6 +23,11 @@ services:
       - "traefik.http.routers.fastapi.service=fastapi"
       # Tell the service to listen to port 8000 on the container
       - "traefik.http.services.fastapi.loadbalancer.server.port=8000"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
 
   nuxt:
     image: ghcr.io/renalreg/ukrdc-nuxt:main
