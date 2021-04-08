@@ -47,8 +47,10 @@ ERRORS_PASS="****"
 
 ```none
 MIRTH_URL="http://staging-mirth.ukrdc.nhs.uk"
+
 UKRDC_HOST="staging-db.ukrdc.nhs.uk"
 JTRACE_HOST="staging-db.ukrdc.nhs.uk"
+ERRORS_HOST="staging-db.ukrdc.nhs.uk"
 
 UKRDC_USER="ukrdc"
 JTRACE_USER="ukrdc"
