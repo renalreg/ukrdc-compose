@@ -4,6 +4,8 @@ Docker-Compose example configuration for UKRDC-TNG deployment, running Nginx as 
 
 ## .env variables
 
+An example/template .env file can be found in [.env.template](./.env.template)
+
 ### Example - Staging
 
 ```none
@@ -13,7 +15,6 @@ API_BASE="/new/api"
 MIRTH_URL="https://staging-mirth.ukrdc.nhs.uk/api"
 MIRTH_VERIFY_SSL=false
 MIRTH_USER="webapi"
-MIRTH_PASS="****"
 
 UKRDC_HOST="staging-db.ukrdc.nhs.uk"
 JTRACE_HOST="staging-db.ukrdc.nhs.uk"
@@ -23,10 +24,10 @@ UKRDC_USER="ukrdc"
 JTRACE_USER="ukrdc"
 ERRORS_USER="ukrdc"
 
+MIRTH_PASS="****"
 UKRDC_PASS="****"
 JTRACE_PASS="****"
 ERRORS_PASS="****"
-
 SWAGGER_CLIENT_ID="****"
 
 ```
