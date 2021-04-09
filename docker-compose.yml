@@ -10,7 +10,6 @@ services:
       # Our public-facing reverse proxy should negate any security risks.
       - FORWARDED_ALLOW_IPS=*
       - REDIS_HOST=redis
-      - API_BASE=/new/api
     env_file: .env
     ports:
       - 8000:8000
