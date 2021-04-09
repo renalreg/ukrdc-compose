@@ -9,6 +9,8 @@ An example/template .env file can be found in [.env.template](./.env.template)
 ### Example - Staging
 
 ```none
+WOTD='["Staging server for testing purposes only."]'
+
 APP_BASE="/new/app"
 API_BASE="/new/api"
 
