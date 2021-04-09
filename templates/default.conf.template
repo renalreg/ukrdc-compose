@@ -1,0 +1,19 @@
+server {
+    listen ${PORT};
+    listen [::]:${PORT};
+
+    access_log /var/log/nginx/reverse-access.log;
+    error_log /var/log/nginx/reverse-error.log;
+
+    location ${APP_BASE} {
+      proxy_set_header Host $http_host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_pass http://${APP_HOST}:${APP_PORT};
+  }
+
+    location ${API_BASE} {
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_pass http://${API_HOST}:${API_PORT};
+  }
+}

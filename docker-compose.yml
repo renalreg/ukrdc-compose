@@ -3,26 +3,17 @@ version: "3.9"
 services:
   fastapi:
     image: ghcr.io/renalreg/ukrdc-fastapi:main
-    # Public environment variables
     environment:
+      # FORWARDED_ALLOW_IPS: Allowing all (*) is a temporary solution.
+      # We cannot resolve the proxy IP at runtime, and since it's unknown
+      # until the container is running, we need to just allow all for now.
+      # Our public-facing reverse proxy should negate any security risks.
+      - FORWARDED_ALLOW_IPS=*
       - REDIS_HOST=redis
-    # Private environment variables
+      - API_BASE=/new/api
     env_file: .env
-    # Allow access to API port
     ports:
       - 8000:8000
-    # Traefik labels
-    labels:
-      # Enable Traefik on this container
-      - "traefik.enable=true"
-      # Route the /api prefix to this container
-      - "traefik.http.routers.fastapi.rule=PathPrefix(`/api`)"
-      # Enable the container to be accessed via the 'web' entrypoint
-      - "traefik.http.routers.fastapi.entrypoints=web"
-      # Name our service fastapi
-      - "traefik.http.routers.fastapi.service=fastapi"
-      # Tell the service to listen to port 8000 on the container
-      - "traefik.http.services.fastapi.loadbalancer.server.port=8000"
     depends_on:
       - redis
 
@@ -31,44 +22,25 @@ services:
 
   nuxt:
     image: ghcr.io/renalreg/ukrdc-nuxt:main
-    # Public environment variables
     environment:
       # Base API URL for server-side (SSR) requests
       - BASE_URL=http://fastapi:8000
       # Base API URL for browser-side (SPA) requests
       - BROWSER_BASE_URL=/
-    # Private environment variables
     env_file: .env
-    # Allow access to app port
     ports:
       - 3000:3000
-    # Traefik labels
-    labels:
-      # Enable Traefik on this container
-      - "traefik.enable=true"
-      # Route the /app prefix to this container
-      - "traefik.http.routers.nuxt.rule=PathPrefix(`/app`)"
-      # Enable the container to be accessed via the 'web' entrypoint
-      - "traefik.http.routers.nuxt.entrypoints=web"
-      # Name our service nuxt
-      - "traefik.http.routers.nuxt.service=nuxt"
-      # Tell the service to listen to port 3000 on the container
-      - "traefik.http.services.nuxt.loadbalancer.server.port=3000"
 
-  proxy:
-    image: traefik:v2.4.7
-    command:
-      # Create our web entrypoint and bind to port 9999
-      - --entrypoints.web.address=:9999
-      # Enable the Docker provider
-      - --providers.docker
-      # Enable insecure access to the Traefik dashboard
-      - --api.insecure=true
-      # Enable logging
-      - --accesslog=true
-    restart: always
-    ports:
-      - "8080:8080"
-      - "9999:9999"
+  nginx:
+    image: nginx:1.19.6
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./templates:/etc/nginx/templates
+    ports:
+      - 9999:9999
+    environment:
+      - API_HOST=fastapi
+      - API_PORT=8000
+      - APP_HOST=nuxt
+      - APP_PORT=3000
+      - PORT=9999
+    env_file: .env
