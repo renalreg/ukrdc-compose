@@ -14,6 +14,11 @@ WOTD='["Staging server for testing purposes only."]'
 APP_BASE="/new/app"
 API_BASE="/new/api"
 
+OAUTH_ISSUER=https://dev-58161221.okta.com/oauth2/ausn7fa9zfh1DC2La5d6
+OAUTH_AUDIENCE=api://ukrdc
+APP_CLIENT_ID=0oan98slw3m4mnhxq5d6
+SWAGGER_CLIENT_ID="0oan75eooLX2DcdQK5d6"
+
 MIRTH_URL="https://staging-mirth.ukrdc.nhs.uk/api"
 MIRTH_VERIFY_SSL=false
 MIRTH_USER="webapi"
@@ -30,7 +35,6 @@ MIRTH_PASS="****"
 UKRDC_PASS="****"
 JTRACE_PASS="****"
 ERRORS_PASS="****"
-SWAGGER_CLIENT_ID="****"
 
 ```
 
@@ -39,6 +43,11 @@ SWAGGER_CLIENT_ID="****"
 ```none
 APP_BASE="/new/app"
 API_BASE="/new/api"
+
+OAUTH_ISSUER=https://dev-58161221.okta.com/oauth2/ausn7fa9zfh1DC2La5d6
+OAUTH_AUDIENCE=api://ukrdc
+APP_CLIENT_ID=0oan98slw3m4mnhxq5d6
+SWAGGER_CLIENT_ID="0oan75eooLX2DcdQK5d6"
 
 MIRTH_URL="https://host.docker.internal/api"
 MIRTH_VERIFY_SSL=false
