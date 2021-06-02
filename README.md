@@ -9,7 +9,7 @@ An example/template .env file can be found in [.env.template](./.env.template)
 ### Example - Staging
 
 ```none
-WOTD='["Staging server for testing purposes only."]'
+DEPLOYMENT_ENV="staging"
 
 APP_BASE="/new/app"
 API_BASE="/new/api"
@@ -38,9 +38,11 @@ ERRORS_PASS="****"
 
 ```
 
-### Example - Staging with localhost DB and Mirth
+### Example - Development with localhost DB and Mirth
 
 ```none
+DEPLOYMENT_ENV="development"
+
 APP_BASE="/new/app"
 API_BASE="/new/api"
 
