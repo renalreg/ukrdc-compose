@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   fastapi:
-    image: ghcr.io/renalreg/ukrdc-fastapi:main
+    image: "ghcr.io/renalreg/ukrdc-fastapi:${DEPLOYMENT_ENV}"
     environment:
       # FORWARDED_ALLOW_IPS: Allowing all (*) is a temporary solution.
       # We cannot resolve the proxy IP at runtime, and since it's unknown
@@ -21,7 +21,7 @@ services:
     image: redis
 
   nuxt:
-    image: ghcr.io/renalreg/ukrdc-nuxt:main
+    image: "ghcr.io/renalreg/ukrdc-nuxt:${DEPLOYMENT_ENV}"
     environment:
       # Base API URL for server-side (SSR) requests
       - BASE_URL=http://fastapi:8000
