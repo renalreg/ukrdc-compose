@@ -10,7 +10,6 @@ services:
       # Our public-facing reverse proxy should negate any security risks.
       - FORWARDED_ALLOW_IPS=*
       - REDIS_HOST=redis
-      - SENTRY_DSN=https://7d31072b22d64673ae5d49f4faf4f0c8@o568031.ingest.sentry.io/5712672
     env_file: .env
     ports:
       - 8000:8000
@@ -29,7 +28,6 @@ services:
       - BASE_URL=http://fastapi:8000
       # Base API URL for browser-side (SPA) requests
       - BROWSER_BASE_URL=/
-      - SENTRY_DSN=https://78dbceacfacd4e83a3efecf2bb5a65ba@o568031.ingest.sentry.io/5712813
     env_file: .env
     ports:
       - 3000:3000
