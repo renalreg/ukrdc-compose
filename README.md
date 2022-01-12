@@ -2,11 +2,17 @@
 
 Docker-Compose example configuration for UKRDC-TNG deployment, running Nginx as a reverse proxy/router.
 
-## .env variables
+## Notes
 
-An example/template .env file can be found in [.env.template](./.env.template)
+### `fastapi.environment.FORWARDED_ALLOW_IPS`
 
-### Example - Staging
+Allowing all (*) is a temporary solution.
+We cannot resolve the proxy IP at runtime, and since it's unknown until the container is running, we need to just allow all for now.
+Our public-facing reverse proxy should negate any security risks.
+
+## Example environments
+
+### Staging
 
 ```none
 DEPLOYMENT_ENV="staging"
@@ -38,7 +44,7 @@ ERRORS_PASS="****"
 
 ```
 
-### Example - Development with localhost DB and Mirth
+### Development with localhost DB and Mirth
 
 ```none
 DEPLOYMENT_ENV="development"
