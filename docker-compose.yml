@@ -4,10 +4,6 @@ services:
   fastapi:
     image: "ghcr.io/renalreg/ukrdc-fastapi:latest"
     environment:
-      # FORWARDED_ALLOW_IPS: Allowing all (*) is a temporary solution.
-      # We cannot resolve the proxy IP at runtime, and since it's unknown
-      # until the container is running, we need to just allow all for now.
-      # Our public-facing reverse proxy should negate any security risks.
       - FORWARDED_ALLOW_IPS=*
       - REDIS_HOST=redis
     env_file: .env
@@ -24,10 +20,7 @@ services:
   nuxt:
     image: "ghcr.io/renalreg/ukrdc-nuxt:latest"
     environment:
-      # Base API URL for server-side (SSR) requests
-      - BASE_URL=http://fastapi:8000
-      # Base API URL for browser-side (SPA) requests
-      - BROWSER_BASE_URL=/
+      - API_BASE_URL=/new/api
     env_file: .env
     ports:
       - 3000:3000
@@ -42,8 +35,10 @@ services:
     environment:
       - API_HOST=fastapi
       - API_PORT=8000
+      - API_BASE=/new/api
       - APP_HOST=nuxt
       - APP_PORT=3000
+      - APP_BASE=/new/app
       - PORT=9999
     env_file: .env
     depends_on:
