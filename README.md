@@ -13,7 +13,7 @@ However, we set up our compose stack such that the API host is only ever accesse
 
 ### `fastapi.environment.ALLOW_ORIGINS`
 
-While we have the option to specify allowed origins for the API, we don't need to do this in production since the UI is served on the same origin under a different path, behind a reverse proxy.
+While we have the option to specify allowed origins for the API, we don't need to do this in production since the UI is served on the same origin under a different path, behind the `nginx` reverse proxy.
 
 ## Example environment
 
