@@ -6,9 +6,14 @@ Docker-Compose example configuration for UKRDC-TNG deployment, running Nginx as 
 
 ### `fastapi.environment.FORWARDED_ALLOW_IPS`
 
-Allowing all (*) is a temporary solution.
-We cannot resolve the proxy IP at runtime, and since it's unknown until the container is running, we need to just allow all for now.
-Our public-facing reverse proxy should negate any security risks.
+Uvicorn uses `FORWARDED_ALLOW_IPS` to determine which proxy IPs are allowed to access the server.
+
+We cannot resolve the proxy IP at runtime, and since it's unknown until the container is running.
+However, we set up our compose stack such that the API host is only ever accessed via it's internal IP address. All external connections are blocked (no exposed ports), and all traffic comes in via the `nginx` reverse proxy. Therefore, we set `FORWARDED_ALLOW_IPS` to allow all IP's to get around this issue.
+
+### `fastapi.environment.ALLOW_ORIGINS`
+
+While we have the option to specify allowed origins for the API, we don't need to do this in production since the UI is served on the same origin under a different path, behind a reverse proxy.
 
 ## Example environment
 
