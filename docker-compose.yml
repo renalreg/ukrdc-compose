@@ -19,8 +19,6 @@ services:
 
   nuxt:
     image: "ghcr.io/renalreg/ukrdc-nuxt:latest"
-    environment:
-      - API_BASE_URL=/api
     env_file: .env
     restart: always
 
