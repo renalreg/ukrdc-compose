@@ -12,8 +12,13 @@ upstream upstreamfastapi {
 }
 
 geo $remote_addr $upstreamnuxt {
+  # Default upstream for most users
   default http://backendnuxt2;
-  192.168.234.58 http://backendnuxt3;
+
+  # Filton office, VPN, and internal AIMES networks
+  192.168.234.0/25 http://backendnuxt3;
+  192.168.202.0/24 http://backendnuxt3;
+  192.168.69.0/24 http://backendnuxt3;
 }
 
 server {
