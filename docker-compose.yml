@@ -22,22 +22,20 @@ services:
     env_file: .env
     restart: always
 
+  nuxt3:
+    image: "ghcr.io/renalreg/ukrdc-nuxt-3:latest"
+    env_file: .env
+    restart: always
+
   nginx:
     image: nginx:1.19.6
     volumes:
       - ./templates:/etc/nginx/templates
     ports:
       - 9999:9999
-    environment:
-      - API_HOST=fastapi
-      - API_PORT=8000
-      - API_BASE=/api
-      - APP_HOST=nuxt
-      - APP_PORT=3000
-      - APP_BASE=/app
-      - PORT=9999
     env_file: .env
     depends_on:
       - fastapi
       - nuxt
+      - nuxt3
     restart: always

@@ -1,19 +1,48 @@
-server {
-    listen ${PORT};
-    listen [::]:${PORT};
+upstream upstream-nuxt-2 {
+  server nuxt:3000;
+}
 
+upstream upstream-nuxt-3 {
+  server nuxt3:3000;
+}
+
+
+upstream upstream-fastapi {
+  server fastapi:8000;
+}
+
+geo $remote_addr $upstream-nuxt {
+  default http://upstream-nuxt-2;
+  192.168.234.58 http://upstream-nuxt-3;
+}
+
+server {
+    listen 9999;
+    listen [::]:9999;
+
+    # Configure logging
     access_log /var/log/nginx/reverse-access.log;
     error_log /var/log/nginx/reverse-error.log;
 
-    location ${APP_BASE} {
+    # Extract real client IP from forwarded traffic
+    # NB: It's not ideal to trust IPs from 0.0.0.0/0,
+    # ideally we'd only trust the specific IP of the
+    # docker host, however this changes. Given all traffic
+    # hitting this container will come _exclusively_ from
+    # the docker host, we can get away with it. See
+    # https://github.com/nginx-proxy/nginx-proxy/issues/130
+    real_ip_header X-Forwarded-For;
+    set_real_ip_from 0.0.0.0/0;
+
+    location /app {
       proxy_set_header Host $http_host;
       proxy_set_header X-Real-IP $remote_addr;
-      proxy_pass http://${APP_HOST}:${APP_PORT};
-  }
+      proxy_pass $upstream-nuxt;
+    }
 
-    location ${API_BASE} {
+    location /api {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
-      proxy_pass http://${API_HOST}:${API_PORT};
-  }
+      proxy_pass http://upstream-fastapi;
+    }
 }
