@@ -1,17 +1,17 @@
-upstream upstream-nuxt-2 {
+upstream backendnuxt2 {
   server nuxt:3000;
 }
 
-upstream upstream-nuxt-3 {
+upstream backendnuxt3 {
   server nuxt3:3000;
 }
 
 
-upstream upstream-fastapi {
+upstream upstreamfastapi {
   server fastapi:8000;
 }
 
-geo $remote_addr $upstream-nuxt {
+geo $remote_addr $upstreamnuxt {
   default http://upstream-nuxt-2;
   192.168.234.58 http://upstream-nuxt-3;
 }
@@ -37,12 +37,12 @@ server {
     location /app {
       proxy_set_header Host $http_host;
       proxy_set_header X-Real-IP $remote_addr;
-      proxy_pass $upstream-nuxt;
+      proxy_pass $upstreamnuxt;
     }
 
     location /api {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
-      proxy_pass http://upstream-fastapi;
+      proxy_pass http://upstreamfastapi;
     }
 }

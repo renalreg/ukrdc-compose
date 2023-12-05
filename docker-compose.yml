@@ -28,7 +28,7 @@ services:
     restart: always
 
   nginx:
-    image: nginx:1.19.6
+    image: "nginx:latest"
     volumes:
       - ./templates:/etc/nginx/templates
     ports:
@@ -39,3 +39,11 @@ services:
       - nuxt
       - nuxt3
     restart: always
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.100.0.0/24
