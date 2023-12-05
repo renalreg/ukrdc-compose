@@ -6,7 +6,6 @@ upstream backendnuxt3 {
   server nuxt3:3000;
 }
 
-
 upstream upstreamfastapi {
   server fastapi:8000;
 }
