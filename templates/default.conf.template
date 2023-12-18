@@ -1,23 +1,23 @@
-upstream backendnuxt2 {
+upstream backend_nuxt {
   server nuxt:3000;
 }
 
-upstream backendnuxt3 {
-  server nuxt3:3000;
+upstream backend_nuxt_edge {
+  server nuxt_edge:3000;
 }
 
-upstream upstreamfastapi {
+upstream upstream_fastapi {
   server fastapi:8000;
 }
 
-geo $remote_addr $upstreamnuxt {
+geo $remote_addr $upstream_nuxt {
   # Default upstream for most users
-  default http://backendnuxt2;
+  default http://backend_nuxt;
 
   # Filton office, VPN, and internal AIMES networks
-  192.168.234.0/25 http://backendnuxt3;
-  192.168.202.0/24 http://backendnuxt3;
-  192.168.69.0/24 http://backendnuxt3;
+  192.168.234.0/25 http://backend_nuxt_edge;
+  192.168.202.0/24 http://backend_nuxt_edge;
+  192.168.69.0/24 http://backend_nuxt_edge;
 }
 
 server {
@@ -41,12 +41,12 @@ server {
     location /app {
       proxy_set_header Host $http_host;
       proxy_set_header X-Real-IP $remote_addr;
-      proxy_pass $upstreamnuxt;
+      proxy_pass $upstream_nuxt;
     }
 
     location /api {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
-      proxy_pass http://upstreamfastapi;
+      proxy_pass http://upstream_fastapi;
     }
 }
