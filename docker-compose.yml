@@ -18,12 +18,12 @@ services:
     restart: always
 
   nuxt:
-    image: "ghcr.io/renalreg/ukrdc-nuxt:latest"
+    image: "ghcr.io/renalreg/ukrdc-nuxt-3:latest"
     env_file: .env
     restart: always
 
-  nuxt3:
-    image: "ghcr.io/renalreg/ukrdc-nuxt-3:latest"
+  nuxt_edge:
+    image: "ghcr.io/renalreg/ukrdc-nuxt-3:edge"
     env_file: .env
     restart: always
 
