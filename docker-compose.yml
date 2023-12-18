@@ -37,7 +37,7 @@ services:
     depends_on:
       - fastapi
       - nuxt
-      - nuxt3
+      - nuxt_edge
     restart: always
 
 networks:
