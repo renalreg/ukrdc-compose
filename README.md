@@ -2,7 +2,41 @@
 
 Docker-Compose example configuration for UKRDC-TNG deployment, running Nginx as a reverse proxy/router.
 
-## Notes
+## Updating deployments
+
+This repo includes convenience scripts for updating to new releases.
+
+Once you've published your updated container images (see below), run `./update_and_restart.sh` from within this directory on the server.
+
+This will pull the updated images, stop, and restart the containers with the new images.
+
+Generally, we suggest also running `docker system prune` afterwards to clean out old images from the system.
+
+A second convenience script, `update_prune_and_log.sh`, does the update and restart, prunes unused images, and then starts showing live logs from the containers. This can be particularly useful for checking deployments are working as expected.
+
+## Instances and Edge
+
+While we make use of a staging environment, this has a tendency to fall out of sync with production/live. Generally then it's used as a first test, to ensure new releases deploy without errors.
+
+Occasionally though, we implement changes significant enough that we want to test them within the production/live environment. To do this, we make use of the `edge` tag on our docker images.
+
+Any time we run a publish action on the `ukrdc-fastapi` and `ukrdc-nuxt-3` repos, whether that's using a manual workflow dispatch, or a tag/release, the release will be tagged with `edge`.
+
+However, _stable_ releases of the `ukrdc-fastapi` and `ukrdc-nuxt-3` repos (those which match a stable semantic version number) will also assign the `latest` tag to the release.
+
+The nginx config here is set so that internal staff will be served the most recent `edge` tag, but external users will be served the most recent `latest` tag.
+
+For stable releases these will be identical.
+
+If larger changes need to be tested then, use pre-releases (e.g. `v5.2.0-beta.1` for the version numbers and tag names) - they will only be tagged with `edge`, not `latest`. Pulling and restarting this compose stack will then update the version internal staff see, without affecting external staff.
+
+More information on versioning and release flow can be found on each individual repo:
+
+[https://github.com/renalreg/ukrdc-fastapi](https://github.com/renalreg/ukrdc-nuxt-3?tab=readme-ov-file#application-and-api-versioning)
+
+[https://github.com/renalreg/ukrdc-nuxt-3](https://github.com/renalreg/ukrdc-nuxt-3?tab=readme-ov-file#application-and-api-versioning)
+
+## Environment Notes
 
 ### `fastapi.environment.FORWARDED_ALLOW_IPS`
 
