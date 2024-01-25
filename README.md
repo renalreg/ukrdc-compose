@@ -36,6 +36,10 @@ More information on versioning and release flow can be found on each individual 
 
 [https://github.com/renalreg/ukrdc-nuxt-3](https://github.com/renalreg/ukrdc-nuxt-3?tab=readme-ov-file#application-and-api-versioning)
 
+### Redis edge
+
+Because task management must be specific to each deployment (latest and edge), we need to create separate Redis instances for each. This has the unfortunate side effect of doubling the amount of work done to update stats for example, but has the advantage in allowing us to internally test new methods of calculating and caching data with Redis (including new stats methods) without affecting external users.
+
 ## Environment Notes
 
 ### `fastapi.environment.FORWARDED_ALLOW_IPS`
