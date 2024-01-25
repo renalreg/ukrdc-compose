@@ -1,22 +1,45 @@
 version: "3.9"
 
+# Common variables, shared between main and edge instances
+x-fastapi-variables: &fastapi-variables
+  FORWARDED_ALLOW_IPS: "*"
+
 services:
+  # Prerequisites
+  redis:
+    image: redis
+    restart: always
+
+  redis_edge:
+    image: redis
+    restart: always
+
+  # API containers
   fastapi:
     image: "ghcr.io/renalreg/ukrdc-fastapi:latest"
     volumes:
       - ./data:/app/data
     environment:
-      - FORWARDED_ALLOW_IPS=*
-      - REDIS_HOST=redis
+      <<: *fastapi-variables
+      REDIS_HOST: "redis"
     env_file: .env
     depends_on:
       - redis
     restart: always
 
-  redis:
-    image: redis
+  fastapi_edge:
+    image: "ghcr.io/renalreg/ukrdc-fastapi:edge"
+    volumes:
+      - ./data:/app/data
+    environment:
+      <<: *fastapi-variables
+      REDIS_HOST: "redis_edge"
+    env_file: .env
+    depends_on:
+      - redis
     restart: always
 
+  # Frontend containers
   nuxt:
     image: "ghcr.io/renalreg/ukrdc-nuxt-3:latest"
     env_file: .env
@@ -27,6 +50,7 @@ services:
     env_file: .env
     restart: always
 
+  # "Binding" proxy
   nginx:
     image: "nginx:latest"
     volumes:
@@ -40,6 +64,7 @@ services:
       - nuxt_edge
     restart: always
 
+# Prevent collision with ARO back-LAN IP ranges
 networks:
   default:
     driver: bridge

@@ -6,8 +6,12 @@ upstream backend_nuxt_edge {
   server nuxt_edge:3000;
 }
 
-upstream upstream_fastapi {
+upstream backend_fastapi {
   server fastapi:8000;
+}
+
+upstream backend_fastapi_edge {
+  server fastapi_edge:8000;
 }
 
 geo $remote_addr $upstream_nuxt {
@@ -18,6 +22,16 @@ geo $remote_addr $upstream_nuxt {
   192.168.234.0/25 http://backend_nuxt_edge;
   192.168.202.0/24 http://backend_nuxt_edge;
   192.168.69.0/24 http://backend_nuxt_edge;
+}
+
+geo $remote_addr $upstream_fastapi {
+  # Default upstream for most users
+  default http://backend_fastapi;
+
+  # Filton office, VPN, and internal AIMES networks
+  192.168.234.0/25 http://backend_fastapi_edge;
+  192.168.202.0/24 http://backend_fastapi_edge;
+  192.168.69.0/24 http://backend_fastapi_edge;
 }
 
 server {
@@ -47,6 +61,6 @@ server {
     location /api {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
-      proxy_pass http://upstream_fastapi;
+      proxy_pass $upstream_fastapi;
     }
 }
